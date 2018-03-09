@@ -22,6 +22,7 @@ add_library(tensorflow STATIC
     $<TARGET_OBJECTS:tf_tools_transform_graph_lib>
     $<$<BOOL:${tensorflow_ENABLE_GRPC_SUPPORT}>:$<TARGET_OBJECTS:tf_core_distributed_runtime>>
     $<TARGET_OBJECTS:tf_core_kernels>
+    ${tf_kernel_objects}
     $<$<AND:$<BOOL:${tensorflow_ENABLE_GPU}>,$<BOOL:${WIN32}>>:$<TARGET_OBJECTS:tf_core_kernels_cpu_only>>
     $<$<BOOL:${tensorflow_ENABLE_GPU}>:$<TARGET_OBJECTS:tf_stream_executor>>
 )
@@ -40,6 +41,8 @@ if(CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.0)
 endif()
 
 install(TARGETS tensorflow ARCHIVE DESTINATION lib)
+install(TARGETS tf_protos_cc ARCHIVE DESTINATION lib)
+install(TARGETS tf_core_gpu_kernels ARCHIVE DESTINATION lib)
 set(tensorflow_LIB_REFS "-ltensorflow")
 set(tensorflow_c_hdrs "${tensorflow_SOURCE_DIR}/tensorflow/c/c_api.h")
 InstallTFHeaders(tensorflow_c_hdrs ${tensorflow_SOURCE_DIR} include)
